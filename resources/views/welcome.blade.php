@@ -21,8 +21,9 @@
         </style>
     </head>
     <body class="antialiased">
+    {{--
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
-            {{--
+
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     @auth
@@ -36,7 +37,26 @@
                     @endauth
                 </div>
             @endif
-            --}}
+            
         </div>
+        --}}
+
+        <main>
+            <div class="relative flex min-h-screen sm:px-8 mt-9 bg-gray-100 dark:bg-gray-900">
+                <div class="mx-auto max-w-7xl lg:px-8">
+                    <div class="relative px-4 sm:px-8 lg:px-12">
+                        <div class="mx-auto max-w-2xl lg:max-w-5xl">
+                            <div class="max-w-2xl  text-gray-700 dark:text-gray-500">
+                                <h1 class="text-4xl text-center font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">42 wWw</h1>
+                                <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">Salut à toi, étudiant de 42.</p>
+                                <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">Est-tu prêt à découvrir toute la richesse de ce site ?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+                                
+                                
     </body>
 </html>
