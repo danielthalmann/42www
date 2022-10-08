@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth42Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +21,13 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+
+Route::get('/auth/redirect', [Auth42Controller::class, 'redirect']);
+
+Route::get('/auth/callback', [Auth42Controller::class, 'callback']);
+
+Route::get('/auth/token', [Auth42Controller::class, 'token']);
+
 
 require __DIR__.'/auth.php';
