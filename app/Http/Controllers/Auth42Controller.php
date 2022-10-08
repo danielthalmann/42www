@@ -23,7 +23,8 @@ class Auth42Controller extends Controller
     
         $client = ClientOAuth::make();
 
-        dd($client->get('https://api.intra.42.fr' . $request->input('q')));
+        dd($client->get('https://api.intra.42.fr' . $request->input('q') . "?page=" . $request->input('page')));
+        dd($client->set_page($request->input('page') ? $request->input('page') : 1)->get('https://api.intra.42.fr' . $request->input('q')));
         dd($client->get('https://api.intra.42.fr/v2/campus'));
     
     }
