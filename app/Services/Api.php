@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Services\ClientOAuth;
 
-class Api 
+class Api
 {
 	/**
 	 * client OAuth
@@ -25,15 +25,16 @@ class Api
 
 	/**
 	 * Return all the accreditations
-	 * 
+	 *
 	 * @see https://api.intra.42.fr/apidoc/2.0/accreditations/index.html
-	 * 
+	 *
 	 * @param integer $id
 	 * @return void
 	 */
 	public function accreditations(int $id = null)
 	{
-		return $this->client->get('/v2/accreditations/' . $id);
+        if ($id)
+		return $this->client->get('/v2/accreditations/' . $id)->datas;
 	}
 
 }
