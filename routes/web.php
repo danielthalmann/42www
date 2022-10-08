@@ -29,5 +29,7 @@ Route::get('/auth/callback', [Auth42Controller::class, 'callback']);
 
 Route::get('/auth/token', [Auth42Controller::class, 'token']);
 
+Route::get('/mytoken', [Auth42Controller::class, 'mytoken']);
+
 
 require __DIR__.'/auth.php';
