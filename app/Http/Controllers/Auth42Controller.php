@@ -34,6 +34,8 @@ class Auth42Controller extends Controller
     public function callback(Request $request)
     {
         ClientOAuth::make()->callback($request->code);
+
+        return "ok";
     }
         
     /**
@@ -44,7 +46,7 @@ class Auth42Controller extends Controller
      */
     public function redirect(Request $request)
     {
-        ClientOAuth::make()->redirect();
+        return ClientOAuth::make()->redirect();
     }
         
 }
