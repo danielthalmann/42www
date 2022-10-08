@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 class Auth42Controller extends Controller
 {
@@ -20,6 +21,10 @@ class Auth42Controller extends Controller
         $this->redirect_uri = env('OAUTH_REDIRECT_URI');
     }
 
+    public function mytoken(Request $request)
+    {
+        return dd(Session::get("token"));
+    }
     
     /**
      * app thiers
@@ -27,22 +32,21 @@ class Auth42Controller extends Controller
     public function token(Request $request)
     {
     
-       // $state = $request->session()->pull('state');
+       // $state = Session::pull('state');
     
        // throw_unless(
        //     strlen($state) > 0 && $state === $request->state,
        //     InvalidArgumentException::class
        // );
+       $data = [
+        'grant_type' => 'client_credentials',
+        'client_id' => $this->Client_ID,
+        'client_secret' => $this->Client_secret,
+       ];
     
         $response = Http::asForm()/* ->withOptions([
             'debug' => true,
-        ]) */->post('http://api.intra.42.fr/oauth/token', [
-            'grant_type' => 'client_credentials',
-            'client_id' => $this->Client_ID,
-            'client_secret' => $this->Client_secret,
-            'redirect_uri' => $this->redirect_uri,
-            'code' => $request->code
-        ]);
+        ]) */->post('https://api.intra.42.fr/oauth/token', $data);
     
         $token = $response->json();
     
@@ -71,17 +75,19 @@ class Auth42Controller extends Controller
        //     strlen($state) > 0 && $state === $request->state,
        //     InvalidArgumentException::class
        // );
+
+       $data = [
+        'grant_type' => 'authorization_code',
+        'client_id' => $this->Client_ID,
+        'client_secret' => $this->Client_secret,
+        'redirect_uri' => $this->redirect_uri,
+        'code' => $request->code
+       ];
     
         $response = Http::asForm()/* ->withOptions([
             'debug' => true,
-        ]) */->post('http://api.intra.42.fr/oauth/token', [
-            'grant_type' => 'authorization_code',
-            'client_id' => $this->Client_ID,
-            'client_secret' => $this->Client_secret,
-            'redirect_uri' => $this->redirect_uri,
-            'code' => $request->code
-        ]);
-    
+        ]) */->post('https://api.intra.42.fr/oauth/token', $data);
+
         $token = $response->json();
     
         if (isset($token['error']))
@@ -89,10 +95,8 @@ class Auth42Controller extends Controller
             return $token['error'];
         }
     
-        $request->session()->put('token', $token );
+        Session::put('token', $token );
 
-        dd($token);
-    
     }
         
     /**
@@ -104,7 +108,7 @@ class Auth42Controller extends Controller
     public function redirect(Request $request)
     {
     
-        $request->session()->put('state', $state = Str::random(40));
+        Session::put('state', $state = Str::random(40));
     
         $query = http_build_query([
             'client_id' => $this->Client_ID,
