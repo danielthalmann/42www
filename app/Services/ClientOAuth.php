@@ -75,6 +75,34 @@ class ClientOAuth
 
 			$this->set_token($token);
 
+		} else {
+
+			$expire = \Carbon\Carbon::createFromTimestamp($this->token['created_at'])
+			->addSeconds($this->token['expires_in']);
+
+			if ($expire < \Carbon\Carbon::now())
+			{
+				$data = [
+					'grant_type' => 'refresh_token',
+					'refresh_token' => $this->token['refresh_token'],
+					'client_id' => $this->Client_ID,
+					'client_secret' => $this->Client_secret,
+					];
+	
+				$response = Http::asForm()
+				->post('https://api.intra.42.fr/oauth/token', $data);
+
+				$token = $response->json();
+		
+				if (isset($token['error']))
+				{
+					throw new Exception($token['error']);
+				}
+	
+				$this->set_token($token);
+
+			}
+					 
 		}
 
 	}
