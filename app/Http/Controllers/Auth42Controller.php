@@ -40,7 +40,7 @@ class Auth42Controller extends Controller
     }
         
     /**
-     * redirect to 42 ai
+     * redirect to 42 api
      *
      * @param Request $request
      * @return void

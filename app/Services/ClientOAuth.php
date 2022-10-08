@@ -14,11 +14,7 @@ class ClientOAuth
     protected $Client_secret = '';
     protected $redirect_uri = '';
 	protected $token = null;
-
-	protected $perPage = 0;
-	protected $page = 1;
-	protected $total = 0;
-
+    protected $host = '';
 
     public function __construct()
     {
@@ -26,6 +22,7 @@ class ClientOAuth
         $this->Client_secret = env('OAUTH_SECRET');
         $this->redirect_uri = env('OAUTH_REDIRECT_URI');
 		$this->token = Session::get('token');
+		$this->host = 'https://api.intra.42.fr';
     }
 
 	public static function make()
@@ -51,24 +48,22 @@ class ClientOAuth
 		return $this;
 	}
 
-
 	public function get($url, $data = [])
 	{
 		$this->init_token();
-		          
+
         $response = Http::withHeaders([
 			'Accept' => 'application/json',
             'Authorization' => 'Bearer '. $this->token['access_token'],
-			'X-Page' => $this->page,
         ])->get($url, $data);
 
-		
-		$this->perPage = $response->header('X-Per-Page');
-		$this->page = $response->header('X-Page');
-		$this->total = $response->header('X-Total');
+        return [
+            'perPage' => $response->header('X-Per-Page'),
+            'page'    => $response->header('X-Page'),
+            'total'   => $response->header('X-Total'),
+            'datas'   => $response->json(),
+        ];
 
-		return $response->json();
-		
 	}
 
 	public function init_token()
@@ -80,13 +75,13 @@ class ClientOAuth
 				'client_id' => $this->Client_ID,
 				'client_secret' => $this->Client_secret,
 				];
-		
+
 			$response = Http::asForm()/* ->withOptions([
 				'debug' => true,
-			]) */->post('https://api.intra.42.fr/oauth/token', $data);
-		
+			]) */->post($this->host . '/oauth/token', $data);
+
 			$token = $response->json();
-		
+
 			if (isset($token['error']))
 			{
 				throw new Exception($token['error']);
@@ -107,21 +102,21 @@ class ClientOAuth
 					'client_id' => $this->Client_ID,
 					'client_secret' => $this->Client_secret,
 					];
-	
+
 				$response = Http::asForm()
-				->post('https://api.intra.42.fr/oauth/token', $data);
+				->post($this->host . '/oauth/token', $data);
 
 				$token = $response->json();
-		
+
 				if (isset($token['error']))
 				{
 					throw new Exception($token['error']);
 				}
-	
+
 				$this->set_token($token);
 
 			}
-					 
+
 		}
 
 	}
@@ -136,10 +131,10 @@ class ClientOAuth
 			'redirect_uri' => $this->redirect_uri,
 			'code' => $code
 		   ];
-		
+
 		$response = Http::asForm()/* ->withOptions([
 			'debug' => true,
-		]) */->post('https://api.intra.42.fr/oauth/token', $data);
+		]) */->post($this->host . '/oauth/token', $data);
 
 		$token = $response->json();
 
@@ -147,17 +142,17 @@ class ClientOAuth
 		{
 			throw new Exception($token['error']);
 		}
-		
+
 		$this->set_token($token);
 
 	}
 
-	
+
     public function redirect()
     {
-    
+
         Session::put('state', $state = Str::random(40));
-    
+
         $query = http_build_query([
             'client_id' => $this->Client_ID,
             'client_secret' => $this->Client_secret,
@@ -166,9 +161,9 @@ class ClientOAuth
             'scope' => '',
             'state' => $state,
         ]);
-    
-        return redirect('https://api.intra.42.fr/oauth/authorize?'.$query);
+
+        return redirect($this->host . '/oauth/authorize?'.$query);
     }
-   	
+
 
 }
