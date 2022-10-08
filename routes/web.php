@@ -27,7 +27,7 @@ Route::get('/auth/redirect', [Auth42Controller::class, 'redirect']);
 
 Route::get('/auth/callback', [Auth42Controller::class, 'callback']);
 
-Route::get('/auth/token', [Auth42Controller::class, 'token']);
+Route::get('/query', [Auth42Controller::class, 'query']);
 
 Route::get('/mytoken', [Auth42Controller::class, 'mytoken']);
 
