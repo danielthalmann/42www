@@ -15,6 +15,11 @@ class ClientOAuth
     protected $redirect_uri = '';
 	protected $token = null;
 
+	protected $perPage = 0;
+	protected $page = 1;
+	protected $total = 0;
+
+
     public function __construct()
     {
         $this->Client_ID = env('OAUTH_UID');
@@ -32,12 +37,20 @@ class ClientOAuth
 	{
 		$this->token = $token;
 		Session::put('token', $token);
+		return $this;
 	}
 
 	public function get_token()
 	{
 		return $this->token;
 	}
+
+	public function set_page($page)
+	{
+		$this->page = $page;
+		return $this;
+	}
+
 
 	public function get($url, $data = [])
 	{
@@ -46,7 +59,13 @@ class ClientOAuth
         $response = Http::withHeaders([
 			'Accept' => 'application/json',
             'Authorization' => 'Bearer '. $this->token['access_token'],
+			'X-Page' => $this->page,
         ])->get($url, $data);
+
+		
+		$this->perPage = $response->header('X-Per-Page');
+		$this->page = $response->header('X-Page');
+		$this->total = $response->header('X-Total');
 
 		return $response->json();
 		
