@@ -13,7 +13,7 @@ class CreateCampusTable extends Migration
      */
     public function up()
     {
-        Schema::create('campus', function (Blueprint $table) {
+        Schema::create('campuses', function (Blueprint $table) {
             $table->id();
             $table->integer('campus_id')->nullable();
             $table->string('name')->nullable();
