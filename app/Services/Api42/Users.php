@@ -56,5 +56,18 @@ class Users
 	public function ofCampus(int $campuId, int $page = 1)
 	{
         return $this->clientApi->toPaginator($this->clientApi->get('/v2/campus/' . $campuId . '/users', ['page' => $page]));
+	}
+
+
+	/**
+	 * Return all cursus of user id
+	 *
+	 * @param integer $campuId
+	 * @param integer $page
+	 * @return void
+	 */
+	public function cursus(int $id, int $page = 1)
+	{
+        return $this->clientApi->toPaginator($this->clientApi->get('/v2/users/' . $id . '/cursus_users', ['page' => $page]));
 	}	
 }

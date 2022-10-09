@@ -86,6 +86,27 @@ class Api42
 		return new Api42\Users($this);
 	}
 	
+	/**
+	 * return cursuses
+	 *
+	 * @return Api42\Cursus
+	 */
+	public function cursus()
+	{
+		return new Api42\Cursus($this);
+	}
+
+		
+	/**
+	 * return cursuses
+	 *
+	 * @return Api42\Skills
+	 */
+	public function skills()
+	{
+		return new Api42\Skills($this);
+	}
+
     /**
 	 * convert response from api to paginator
 	 *
