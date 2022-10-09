@@ -15,22 +15,22 @@ class CreateCampusTable extends Migration
     {
         Schema::create('campus', function (Blueprint $table) {
             $table->id();
-            $table->integer('campus_id');
-            $table->string('name');
-            $table->string('time_zone');
-            $table->integer('users_count');
-            $table->integer('vogsphere_id');
-            $table->string('country');
-            $table->string('address');
-            $table->string('zip');
-            $table->string('city');
-            $table->string('website');
-            $table->string('facebook');
-            $table->string('twitter');
-            $table->boolean('active');
-            $table->boolean('public');
-            $table->string('email_extension');
-            $table->string('default_hidden_phone');
+            $table->integer('campus_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('time_zone')->nullable();
+            $table->integer('users_count')->nullable();
+            $table->integer('vogsphere_id')->nullable();
+            $table->string('country')->nullable();
+            $table->string('address')->nullable();
+            $table->string('zip')->nullable();
+            $table->string('city')->nullable();
+            $table->string('website')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('twitter')->nullable();
+            $table->boolean('active')->nullable();
+            $table->boolean('public')->nullable();
+            $table->string('email_extension')->nullable();
+            $table->string('default_hidden_phone')->nullable();
             $table->timestamps();
         });
     }
