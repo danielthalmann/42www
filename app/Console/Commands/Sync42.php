@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use App\Models\Campus;
 use App\Services\Api42;
 use App\Services\ClientOAuth;
@@ -45,6 +46,7 @@ class Sync42 extends Command
 
         $clientApi = new Api42(ClientOAuth::make());
         $this->sync_campus($clientApi->campus());
+        $this->sync_users($clientApi->users());
 
         return 0;
     }
@@ -102,31 +104,52 @@ class Sync42 extends Command
         } 
     }
 
-    public function sync_campus($userApi)
+    public function sync_users($userApi)
     {
 
-        $user = User::where('user42_id', $user42['id'])->first();
+        $page = 1;
+        $campuId = 47; // 42Lausanne
 
-        if(!$user)
+        $us = $userApi->ofCampus($campuId, $page);
+
+        while ( $page != $us->lastPage() )
         {
-            $user = new User();
 
-            $user->user42_id   = $user42['id'];
-            $user->name        = $user42['displayname'];
-            $user->login       = $user42['login'];
-            $user->email       = $user42['email'];
-            $user->first_name  = $user42['first_name'];
-            $user->last_name   = $user42['last_name'];
-            $user->url         = $user42['url'];
-            $user->phone       = $user42['phone'];
-            $user->image_url   = $user42['image_url'];
-            $user->pool_month  = $user42['pool_month'];
-            $user->pool_year   = $user42['pool_year'];
+            foreach($us as $user42)
+            {
 
-            $user->password    = ''; // Hash::make();
+                $user = User::where('user42_id', $user42['id'])->first();
 
-            $user->save();
-        }    
+                if(!$user)
+                {
+                    $user = new User();
+
+                    $user->user42_id   = $user42['id'];
+                    $user->name        = $user42['displayname'];
+                    $user->login       = $user42['login'];
+                    $user->email       = $user42['email'];
+                    $user->first_name  = $user42['first_name'];
+                    $user->last_name   = $user42['last_name'];
+                    $user->url         = $user42['url'];
+                    $user->phone       = $user42['phone'];
+                    $user->image_url   = $user42['image_url'];
+                    $user->pool_month  = $user42['pool_month'];
+                    $user->pool_year   = $user42['pool_year'];
+
+                    $user->password    = ''; // Hash::make();
+
+                    $user->save();
+                }
+            
+            }
+
+            if ( $page != $us->lastPage() )
+            {
+                $page++;
+                $us = $userApi->ofCampus($campuId, $page);
+            }
+
+        }
 
     }
 }

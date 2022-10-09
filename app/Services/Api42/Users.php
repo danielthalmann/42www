@@ -5,7 +5,7 @@ namespace App\Services\Api42;
 use App\Services\ClientOAuth;
 use Illuminate\Pagination\Paginator;
 
-class Campus
+class Users
 {
 	/**
 	 * client OAuth

@@ -69,13 +69,21 @@ class Api42
 	/**
 	 * Return campus
 	 *
-	 * @param integer|null $id
-	 * @param integer $page
 	 * @return Api42\Campus
 	 */
 	public function campus()
 	{
         return new Api42\Campus($this);
+	}
+
+	/**
+	 * return users
+	 *
+	 * @return Api42\Users
+	 */
+	public function users()
+	{
+		return new Api42\Users($this);
 	}
 	
     /**
