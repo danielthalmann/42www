@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Exception;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 
@@ -57,10 +58,11 @@ class ClientOAuth
             'Authorization' => 'Bearer '. $this->token['access_token'],
         ])->get($url, $data);
 
+	//	Log::info(json_encode($response->json()));
         return [
-            'perPage' => $response->header('X-Per-Page'),
-            'page'    => $response->header('X-Page'),
-            'total'   => $response->header('X-Total'),
+            'perPage' => (int)$response->header('X-Per-Page'),
+            'page'    => (int)$response->header('X-Page'),
+            'total'   => (int)$response->header('X-Total'),
             'datas'   => $response->json(),
         ];
 
