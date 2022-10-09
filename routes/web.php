@@ -23,9 +23,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 
-Route::get('/auth/redirect', [Auth42Controller::class, 'redirect']);
+Route::get('/auth/redirect', [Auth42Controller::class, 'redirect'])
+    ->name('auth.redirect');
 
-Route::get('/auth/callback', [Auth42Controller::class, 'callback']);
+Route::get('/auth/callback', [Auth42Controller::class, 'callback'])
+    ->name('auth.callback');
 
 Route::get('/query', [Auth42Controller::class, 'query']);
 

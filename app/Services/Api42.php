@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Services\ClientOAuth;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-class Api
+class Api42
 {
 	/**
 	 * client OAuth
@@ -25,6 +25,12 @@ class Api
 	{
 		$this->client = $client;
 		$this->host = 'https://api.intra.42.fr';
+	}
+
+
+	public function get(string $fn, $data = null)
+	{
+		return $this->client->get($this->host . $fn, $data);
 	}
 
 	/**
@@ -60,15 +66,27 @@ class Api
             return $this->toPaginator($this->client->get($this->host . '/v2/achievements/' . $id));
 	}
 
+	/**
+	 * Return campus
+	 *
+	 * @param integer|null $id
+	 * @param integer $page
+	 * @return Api42\Campus
+	 */
+	public function campus()
+	{
+        return new Api42\Campus($this);
+	}
+	
     /**
 	 * convert response from api to paginator
 	 *
 	 * @param array $datas
 	 * @return void
 	 */
-    private function toPaginator($datas)
+    public function toPaginator($datas)
     {
-        return new Paginator($datas['datas'], $datas['perPage'], $datas['page']);
+        return new LengthAwarePaginator($datas['datas'], $datas['total'], $datas['perPage'], $datas['page']);
     }
 
 }

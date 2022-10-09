@@ -96,12 +96,21 @@ class ClientOAuth
 
 			if ($expire < \Carbon\Carbon::now())
 			{
-				$data = [
-					'grant_type' => 'refresh_token',
-					'refresh_token' => $this->token['refresh_token'],
-					'client_id' => $this->Client_ID,
-					'client_secret' => $this->Client_secret,
-					];
+				if(isset($this->token['refresh_token']))
+				{
+					$data = [
+						'grant_type' => 'refresh_token',
+						'refresh_token' => $this->token['refresh_token'],
+						'client_id' => $this->Client_ID,
+						'client_secret' => $this->Client_secret,
+						];
+				} else {
+					$data = [
+						'grant_type' => 'client_credentials',
+						'client_id' => $this->Client_ID,
+						'client_secret' => $this->Client_secret,
+						];
+				}
 
 				$response = Http::asForm()
 				->post($this->host . '/oauth/token', $data);
