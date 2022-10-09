@@ -14,6 +14,8 @@ class Api
 	 */
 	protected $client;
 
+	protected $host;
+
 	/**
 	 * Undocumented function
 	 *
@@ -22,6 +24,7 @@ class Api
 	public function __construct($client)
 	{
 		$this->client = $client;
+		$this->host = 'https://api.intra.42.fr';
 	}
 
 	/**
@@ -35,9 +38,9 @@ class Api
 	public function accreditations(int $id = null)
 	{
         if ($id)
-		    return $this->client->get('/v2/accreditations/' . $id)->datas;
+		    return $this->client->get($this->host . '/v2/accreditations/' . $id)->datas;
         else
-            return $this->toPaginator($this->client->get('/v2/accreditations/' . $id));
+            return $this->toPaginator($this->client->get($this->host . '/v2/accreditations/' . $id));
 	}
 
 
@@ -52,19 +55,20 @@ class Api
 	public function achievements(int $id = null)
 	{
         if ($id)
-		    return $this->client->get('/v2/achievements/' . $id)->datas;
+		    return $this->client->get($this->host . '/v2/achievements/' . $id)->datas;
         else
-            return $this->toPaginator($this->client->get('/v2/achievements/' . $id));
+            return $this->toPaginator($this->client->get($this->host . '/v2/achievements/' . $id));
 	}
 
     /**
-     * convert response from api to paginator
-     *
-     * @return void
-     */
+	 * convert response from api to paginator
+	 *
+	 * @param array $datas
+	 * @return void
+	 */
     private function toPaginator($datas)
     {
-        return new Paginator($datas->datas, $data->perPage, $data->page);
+        return new Paginator($datas['datas'], $datas['perPage'], $datas['page']);
     }
 
 }
