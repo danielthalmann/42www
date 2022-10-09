@@ -40,7 +40,7 @@ class Auth42Controller extends Controller
         
         $client->callback($request->code);
 
-        $user42 = $client->get('https://api.intra.42.fr/v2/me');
+        $user42 = $client->get('https://api.intra.42.fr/v2/me')['datas'];
 
         $user = User::where('user42_id', $user42['id'])->first();
 
