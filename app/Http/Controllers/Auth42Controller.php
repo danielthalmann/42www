@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\ClientOAuth;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 
@@ -59,6 +60,8 @@ class Auth42Controller extends Controller
             $user->image_url   = $user42['image_url'];
             $user->pool_month  = $user42['pool_month'];
             $user->pool_year   = $user42['pool_year'];
+
+            $user->password    = ''; // Hash::make();
 
             $user->save();
         }
