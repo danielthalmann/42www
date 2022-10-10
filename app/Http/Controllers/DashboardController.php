@@ -15,9 +15,13 @@ class DashboardController extends Controller
     public function index()
     {
         $blackholeds = User::join('cursus_users', 'user42_id', '=', 'user_id')
+        ->where('cursus_id', 21)
+        ->whereNull('end_at')
+        ->whereNotNull('blackholed_at')
         ->orderBy('blackholed_at', 'asc')
         ->limit(5)
-        ->get();        
+        ->get(); 
+
         return view('dashboard', compact(['blackholeds']));
     }
     

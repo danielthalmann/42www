@@ -16,10 +16,12 @@
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Next Blackhole</h2>
+
         @foreach($blackholeds as $user)
 
         <div class="border-2 border-sky-500 bg-white">
-            <img src="{{ $user->image_url }}" alt="{{ $user->login }}">
+            <img src="{{ $user->image_url }}" style="height: 100px;" alt="{{ $user->login }}">
             {{ $user->name }}
             {{ $user->blackholed_at }}
         </div>
