@@ -13,5 +13,19 @@
                 </div>
             </div>
         </div>
+
+    <div class="grid grid-cols-3 gap-4">
+
+        @foreach($blackholeds as $user)
+
+        <div class="border-2 border-sky-500">
+            {{ $user->name }}
+            {{ $user->blackholed_at }}
+        </div>
+
+        @endforeach
+
+    </div>
+
     </div>
 </x-app-layout>
