@@ -14,11 +14,12 @@
             </div>
         </div>
 
-    <div class="grid grid-cols-3 gap-4">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
         @foreach($blackholeds as $user)
 
-        <div class="border-2 border-sky-500">
+        <div class="border-2 border-sky-500 bg-white">
+            <img src="{{ $user->image_url }}" alt="{{ $user->login }}">
             {{ $user->name }}
             {{ $user->blackholed_at }}
         </div>
