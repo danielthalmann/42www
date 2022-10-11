@@ -136,7 +136,10 @@ class Api42
 	 */
     public function toPaginator($datas)
     {
-        return new LengthAwarePaginator($datas['datas'], $datas['total'], $datas['perPage'], $datas['page']);
+		$total = $datas['total'] ? $datas['total'] : 0;
+		$perPage = $datas['perPage'] ? $datas['perPage'] : 1;
+		$page = $datas['page'] ? $datas['page'] : 1;
+        return new LengthAwarePaginator($datas['datas'], $total, $perPage, $page);
     }
 
 }

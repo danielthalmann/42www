@@ -43,7 +43,7 @@ class Users
 	 */
 	public function all(int $page = 1)
 	{
-        return $this->clientApi->toPaginator($this->clientApi->get('/v2/users', ['page' => $page]));
+        return $this->clientApi->toPaginator($this->clientApi->get('/v2/users', ['page' => $page, 'perPage' => 100]));
 	}
 
 	/**
@@ -68,6 +68,6 @@ class Users
 	 */
 	public function cursus(int $id, int $page = 1)
 	{
-        return $this->clientApi->toPaginator($this->clientApi->get('/v2/users/' . $id . '/cursus_users', ['page' => $page]));
+        return $this->clientApi->toPaginator($this->clientApi->get('/v2/users/' . $id . '/cursus_users', ['page' => $page, 'perPage' => 100]));
 	}	
 }

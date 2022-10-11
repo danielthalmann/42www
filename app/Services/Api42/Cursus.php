@@ -43,7 +43,7 @@ class Cursus
 	 */
 	public function all(int $page = 1)
 	{
-        return $this->clientApi->toPaginator($this->clientApi->get('/v2/cursus', ['page' => $page]));
+        return $this->clientApi->toPaginator($this->clientApi->get('/v2/cursus', ['page' => $page, 'perPage' => 100]));
 	}
 	
 }

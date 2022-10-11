@@ -43,7 +43,7 @@ class Skills
 	 */
 	public function all(int $page = 1)
 	{
-        return $this->clientApi->toPaginator($this->clientApi->get('/v2/skills', ['page' => $page]));
+        return $this->clientApi->toPaginator($this->clientApi->get('/v2/skills', ['page' => $page, 'perPage' => 100]));
 	}
 	
 }

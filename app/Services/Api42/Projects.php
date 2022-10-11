@@ -43,7 +43,7 @@ class Projects
 	 */
 	public function all(int $page = 1)
 	{
-        return $this->clientApi->toPaginator($this->clientApi->get('/v2/projects', ['page' => $page]));
+        return $this->clientApi->toPaginator($this->clientApi->get('/v2/projects', ['page' => $page, 'perPage' => 100]));
 	}
 	
 }

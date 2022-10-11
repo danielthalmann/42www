@@ -53,12 +53,12 @@ class Sync42 extends Command
         
 
         $clientApi = new Api42(ClientOAuth::make());
-    //    $this->sync_campus($clientApi->campus());
-    //    $this->sync_cursus($clientApi->cursus());
-    //    $this->sync_skills($clientApi->skills());
-        $this->sync_users($clientApi->users(), $clientApi->campus());
-    //    $this->sync_coalitions($clientApi->coalitions());
-    //    $this->sync_projects($clientApi->projects());
+        $this->sync_campus($clientApi->campus());
+        $this->sync_cursus($clientApi->cursus());
+        $this->sync_skills($clientApi->skills());
+        $this->sync_coalitions($clientApi->coalitions());
+        $this->sync_projects($clientApi->projects());
+    //    $this->sync_users($clientApi->users(), $clientApi->campus());
 
         return 0;
     }
@@ -131,7 +131,7 @@ class Sync42 extends Command
 
         $us = $campusApi->users($campuId, $page);
 
-        while ( $page != $us->lastPage() )
+        while ( $page <= $us->lastPage() )
         {
 
             foreach($us as $user42)
@@ -229,11 +229,13 @@ class Sync42 extends Command
               
             }
 
-            if ( $page != $us->lastPage() )
+            if ( $page < $us->lastPage() )
             {
                 $page++;
                 $us = $userApi->ofCampus($campuId, $page);
             }
+            else
+                break;
 
         }
     }
@@ -245,7 +247,7 @@ class Sync42 extends Command
 
         $cs = $cursusApi->all($page);
 
-        while ( $page != $cs->lastPage() )
+        while ( $page <= $cs->lastPage() )
         {
 
             foreach($cs as $c)
@@ -265,11 +267,13 @@ class Sync42 extends Command
                 }
             }
 
-            if ( $page != $cs->lastPage() )
+            if ( $page < $cs->lastPage() )
             {
                 $page++;
                 $cs = $cursusApi->all($page);
             }
+            else
+                break;
 
         }
 

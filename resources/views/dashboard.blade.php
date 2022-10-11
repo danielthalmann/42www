@@ -5,25 +5,81 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 lg:flex">
     
-        <div class="lg:grid lg:grid-cols-3 gap-4">
+        <div class="lg:w-2/3 2xl:w-3/4">
 
-            <div class="sm:px-6 col-span-2">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        You're logged in!
+            <div class="grid sm:grid-cols-3 lg:grid-cols-4">
+
+                <div class="sm:px-3 mb-5">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 bg-white">
+                            <span class="text-xl text-sky-400">{{ $cuser->wallet }}</span>
+                            <br> money
+                        </div>
                     </div>
                 </div>
+
+                <div class="sm:px-3 mb-5">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 bg-white">
+                            <span class="text-xl text-sky-400">{{ $cuser->correction_point }}</span>
+                            <br> correction point 
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sm:px-3 mb-5">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 bg-white">
+                            <span class="text-xl text-sky-400">{{ $cursus->cursus_name }}</span>
+                            <br> current cursus
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="sm:px-3 mb-5">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 bg-white">
+                            <span class="text-xl text-sky-400">{{ $projectCount }}</span>
+                            <br> Finished project
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="sm:px-3 mb-5">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 bg-white">
+                            <span class="text-xl text-sky-400">{{ $projectInprogressCount }}</span>
+                            <br> Project in progress
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="sm:px-3 mb-5">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 bg-white">
+                            <span class="text-xl text-sky-400">{{ $projectAvg }} / {{ $projectAvgCursus }}</span>
+                            <br> Average score
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="sm:px-6">
+        </div>
 
+        <div class="lg:w-1/3  2xl:w-1/4">
+
+            <div class="sm:px-3">
                 <h2 class="font-semibold text-xl text-gray-100 leading-tight mb-2">Next Blackhole</h2>
-            
+           
                 @foreach($blackholeds as $user)
                 <figure class="md:flex rounded-xl p-8 mb-2 md:p-0 bg-slate-800">
-                    <img class="max-h-24 md:h-auto md:rounded-none rounded-full" src="{{ $user->image_url }}" alt="">
+                    <img class="max-h-24 md:h-auto mx-auto md:mx-0" src="{{ $user->image_url }}" alt="">
                     <div class="pt-6 md:p-5 text-center md:text-left space-y-4">
                         <figcaption class="font-medium">
                             <div class="text-sky-500 dark:text-sky-400">
@@ -38,6 +94,10 @@
                 @endforeach
 
             </div>
+
+        </div>
+
+
 
         </div>
 
