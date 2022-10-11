@@ -32,5 +32,9 @@ Route::get('/query', [Auth42Controller::class, 'query']);
 
 Route::get('/mytoken', [Auth42Controller::class, 'mytoken']);
 
+// Route::get('/login', function(){
+//     $user = App\Models\User::where('login', 'dthalman')->first();
+//     Illuminate\Support\Facades\Auth::login($user);
+// });
 
 require __DIR__.'/auth.php';

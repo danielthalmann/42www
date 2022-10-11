@@ -1,34 +1,45 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    You're logged in!
+    
+        <div class="lg:grid lg:grid-cols-3 gap-4">
+
+            <div class="sm:px-6 col-span-2">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 bg-white border-b border-gray-200">
+                        You're logged in!
+                    </div>
                 </div>
             </div>
+
+            <div class="sm:px-6">
+
+                <h2 class="font-semibold text-xl text-gray-100 leading-tight mb-2">Next Blackhole</h2>
+            
+                @foreach($blackholeds as $user)
+                <figure class="md:flex rounded-xl p-8 mb-2 md:p-0 bg-slate-800">
+                    <img class="max-h-24 md:h-auto md:rounded-none rounded-full" src="{{ $user->image_url }}" alt="">
+                    <div class="pt-6 md:p-5 text-center md:text-left space-y-4">
+                        <figcaption class="font-medium">
+                            <div class="text-sky-500 dark:text-sky-400">
+                                {{ $user->name }}
+                            </div>
+                            <div class="text-slate-500">
+                            {{ $user->blackholed_at->format('d.m.Y') }}
+                            </div>
+                        </figcaption>
+                    </div>
+                </figure>
+                @endforeach
+
+            </div>
+
         </div>
-
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Next Blackhole</h2>
-
-        @foreach($blackholeds as $user)
-
-        <div class="border-2 border-sky-500 bg-white">
-            <img src="{{ $user->image_url }}" style="height: 100px;" alt="{{ $user->login }}">
-            {{ $user->name }}
-            {{ $user->blackholed_at }}
-        </div>
-
-        @endforeach
-
-    </div>
 
     </div>
 </x-app-layout>
