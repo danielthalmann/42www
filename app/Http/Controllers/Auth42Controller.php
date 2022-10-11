@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Auth;
 class Auth42Controller extends Controller
 {
 
-    public function mytoken()
-    {
-        return ClientOAuth::make()->get_token();
-    }
-    
     /**
      * app thiers
      */

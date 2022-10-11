@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth42Controller;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,9 +29,13 @@ Route::get('/auth/redirect', [Auth42Controller::class, 'redirect'])
 Route::get('/auth/callback', [Auth42Controller::class, 'callback'])
     ->name('auth.callback');
 
-Route::get('/query', [Auth42Controller::class, 'query']);
+Route::get('/query', [Auth42Controller::class, 'query'])
+    ->middleware(['auth'])
+    ->name('query');
 
-Route::get('/mytoken', [Auth42Controller::class, 'mytoken']);
+Route::get('/users', [UsersController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('users');
 
 // Route::get('/login', function(){
 //     $user = App\Models\User::where('login', 'dthalman')->first();

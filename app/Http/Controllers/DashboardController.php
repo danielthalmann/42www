@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CursusProject;
 use App\Models\User;
 use App\Models\CursusUser;
 use App\Models\ProjectUser;
@@ -45,6 +46,10 @@ class DashboardController extends Controller
         ->where('validated', true)
         ->count();
 
+        $projectCursusCount = CursusProject::where('cursus_id', $cursusId)
+        ->join('projects', 'projects.project_id', '=', 'cursus_projects.project_id')
+        ->count();
+
         $projectAvg = Round(ProjectUser::where('user_id', $cuser->user42_id)
         ->where('cursus_id', $cursusId)
         ->where('validated', true)
@@ -61,7 +66,14 @@ class DashboardController extends Controller
         ->where('marked', true)
         ->count();
 
-        return view('dashboard', compact(['blackholeds', 'cuser', 'cursus', 'projectCount', 'projectInprogressCount', 'projectAvg', 'projectAvgCursus']));
+        $projectLast = ProjectUser::where('user_id', $cuser->user42_id)
+        ->join('projects', 'projects.project_id', '=', 'project_users.project_id')
+        ->where('cursus_id', $cursusId)
+        ->where('validated', true)
+        ->orderBy('marked_at', 'desc')
+        ->first();
+
+        return view('dashboard', compact(['blackholeds', 'cuser', 'cursus', 'projectCount', 'projectCursusCount', 'projectInprogressCount', 'projectAvg', 'projectAvgCursus', 'projectLast']));
     }
     
 }

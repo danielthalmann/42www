@@ -42,8 +42,8 @@
                 <div class="sm:px-3 mb-5">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white">
-                            <span class="text-xl text-sky-400">{{ $projectCount }}</span>
-                            <br> Finished project
+                            <span class="text-xl text-sky-400">{{ $projectCount }} / {{ $projectCursusCount }} </span>
+                            <br> finished project
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white">
                             <span class="text-xl text-sky-400">{{ $projectInprogressCount }}</span>
-                            <br> Project in progress
+                            <br> project in progress
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,17 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white">
                             <span class="text-xl text-sky-400">{{ $projectAvg }} / {{ $projectAvgCursus }}</span>
-                            <br> Average score
+                            <br> average score
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="sm:px-3 mb-5">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 bg-white">
+                            <span class="text-xl text-sky-400">{{ $projectLast->name }}</span>
+                            <br> last project
                         </div>
                     </div>
                 </div>
