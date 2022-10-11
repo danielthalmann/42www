@@ -5,7 +5,7 @@ namespace App\Services\Api42;
 use App\Services\ClientOAuth;
 use Illuminate\Pagination\Paginator;
 
-class Campus
+class Projects
 {
 	/**
 	 * client OAuth
@@ -25,37 +25,25 @@ class Campus
 	}
 
 	/**
-	 * Return the campus id
+	 * Return the projects id
 	 *
 	 * @param integer $id
 	 * @return void
 	 */
 	public function get(int $id)
 	{
-	    return $this->clientApi->get('/v2/campus/' . $id)['datas'];
+	    return $this->clientApi->get('/v2/projects/' . $id)['datas'];
 	}
 
 	/**
-	 * Return all the users of campus id
-	 *
-	 * @param integer $id
-	 * @param integer $page
-	 * @return void
-	 */
-	public function users(int $id, int $page = 1)
-	{
-        return $this->clientApi->toPaginator($this->clientApi->get('/v2/campus/' . $id . '/users', ['page' => $page, 'perPage' => 100]));
-	}
-
-	/**
-	 * Return all the campus
+	 * Return all the projects
 	 *
 	 * @param integer $page
 	 * @return void
 	 */
 	public function all(int $page = 1)
 	{
-        return $this->clientApi->toPaginator($this->clientApi->get('/v2/campus', ['page' => $page]));
+        return $this->clientApi->toPaginator($this->clientApi->get('/v2/projects', ['page' => $page]));
 	}
 	
 }

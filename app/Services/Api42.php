@@ -107,6 +107,27 @@ class Api42
 		return new Api42\Skills($this);
 	}
 
+		
+	/**
+	 * return cursuses
+	 *
+	 * @return Api42\Coalitions
+	 */
+	public function coalitions()
+	{
+		return new Api42\Coalitions($this);
+	}
+		
+	/**
+	 * return cursuses
+	 *
+	 * @return Api42\Projects
+	 */
+	public function projects()
+	{
+		return new Api42\Projects($this);
+	}	
+
     /**
 	 * convert response from api to paginator
 	 *

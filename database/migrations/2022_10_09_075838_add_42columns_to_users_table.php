@@ -23,6 +23,10 @@ class Add42columnsToUsersTable extends Migration
             $table->string('image_url')->nullable();
             $table->string('pool_month')->nullable();
             $table->string('pool_year')->nullable();
+            $table->integer('correction_point')->nullable();
+            $table->integer('wallet')->nullable();
+            $table->boolean('alumni')->nullable();
+            $table->dateTime('alumnized_at')->nullable();
         });
     }
 

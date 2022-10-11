@@ -32,7 +32,7 @@ class Skills
 	 */
 	public function get(int $id)
 	{
-	    return $this->clientApi->get('/v2/skills/' . $id)->datas;
+	    return $this->clientApi->get('/v2/skills/' . $id)['datas'];
 	}
 
 	/**

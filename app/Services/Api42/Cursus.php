@@ -32,7 +32,7 @@ class Cursus
 	 */
 	public function get(int $id)
 	{
-	    return $this->clientApi->get('/v2/cursus/' . $id)->datas;
+	    return $this->clientApi->get('/v2/cursus/' . $id)['datas'];
 	}
 
 	/**

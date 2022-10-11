@@ -32,7 +32,7 @@ class Users
 	 */
 	public function get(int $id)
 	{
-	    return $this->clientApi->get('/v2/users/' . $id)->datas;
+	    return $this->clientApi->get('/v2/users/' . $id)['datas'];
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Users
 	 */
 	public function ofCampus(int $campuId, int $page = 1)
 	{
-        return $this->clientApi->toPaginator($this->clientApi->get('/v2/campus/' . $campuId . '/users', ['page' => $page]));
+        return $this->clientApi->toPaginator($this->clientApi->get('/v2/campus/' . $campuId . '/users', ['page' => $page, 'perPage' => 100]));
 	}
 
 

@@ -3,11 +3,16 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use App\Models\Skill;
 use App\Models\Campus;
 use App\Models\Cursus;
-use App\Models\Skill;
+use App\Models\Project;
 use App\Services\Api42;
+use App\Models\Coalition;
 use App\Models\CursusUser;
+use App\Models\ProjectUser;
+use App\Models\CampusProject;
+use App\Models\CursusProject;
 use App\Services\ClientOAuth;
 use Illuminate\Console\Command;
 
@@ -50,8 +55,10 @@ class Sync42 extends Command
         $clientApi = new Api42(ClientOAuth::make());
     //    $this->sync_campus($clientApi->campus());
     //    $this->sync_cursus($clientApi->cursus());
-        $this->sync_skills($clientApi->skills());
-    //    $this->sync_users($clientApi->users());
+    //    $this->sync_skills($clientApi->skills());
+        $this->sync_users($clientApi->users(), $clientApi->campus());
+    //    $this->sync_coalitions($clientApi->coalitions());
+    //    $this->sync_projects($clientApi->projects());
 
         return 0;
     }
@@ -113,59 +120,93 @@ class Sync42 extends Command
      * sync users
      *
      * @param App\Services\Api42\Users $userApi
+     * @param App\Services\Api42\Campus $campusApi
      * @return void
      */
-    public function sync_users($userApi)
+    public function sync_users($userApi, $campusApi)
     {
 
         $page = 1;
         $campuId = 47; // 42Lausanne
 
-        $us = $userApi->ofCampus($campuId, $page);
+        $us = $campusApi->users($campuId, $page);
 
         while ( $page != $us->lastPage() )
         {
 
             foreach($us as $user42)
             {
-
+                
                 $user = User::where('user42_id', $user42['id'])->first();
 
-                if(!$user)
+                if (!$user)
                 {
-                    $user = new User();
+                    $user42 = $userApi->get($user42['id']);
 
-                    $user->user42_id   = $user42['id'];
-                    $user->name        = $user42['displayname'];
-                    $user->login       = $user42['login'];
-                    $user->email       = $user42['email'];
-                    $user->first_name  = $user42['first_name'];
-                    $user->last_name   = $user42['last_name'];
-                    $user->url         = $user42['url'];
-                    $user->phone       = $user42['phone'];
-                    $user->image_url   = $user42['image_url'];
-                    $user->pool_month  = $user42['pool_month'];
-                    $user->pool_year   = $user42['pool_year'];
-
-                    $user->password    = ''; // Hash::make();
-
-                    $user->save();
-                }
-
-                if (!CursusUser::where('user_id', $user->user42_id)->first())
-                {
-                    $cursuses = $userApi->cursus($user->user42_id);
-
-                    foreach($cursuses as $cursus)
+                    if(!$user)
                     {
-                        $cursususer = CursusUser::where('cursus_id', $cursus['cursus_id'])
-                            ->where('user_id', $user->user42_id)
+                        $user = new User();
+
+                        $user->user42_id   = $user42['id'];
+                        $user->name        = $user42['displayname'];
+                        $user->login       = $user42['login'];
+                        $user->email       = $user42['email'];
+                        $user->first_name  = $user42['first_name'];
+                        $user->last_name   = $user42['last_name'];
+                        $user->url         = $user42['url'];
+                        $user->phone       = $user42['phone'];
+                        $user->image_url   = $user42['image_url'];
+                        $user->correction_point = $user42['correction_point'];
+                        $user->pool_month  = $user42['pool_month'];
+                        $user->pool_year   = $user42['pool_year'];
+                        $user->correction_point   = $user42['correction_point'];
+                        $user->wallet             = $user42['wallet'];
+                        $user->alumni             = $user42['alumni?'];
+                        $user->alumnized_at       = $user42['alumnized_at'];
+
+                        $user->password    = ''; // Hash::make();
+
+                        $user->save();
+                    }
+
+                    foreach($user42['projects_users'] as $project)
+                    {
+
+                        $projectusers = ProjectUser::where('user_id', $user->user42_id)
+                            ->where('project_id', $project['project']['id'])
                             ->first();
-                        
+
+                        if (!$projectusers)
+                        {
+                            $projectusers = new ProjectUser();
+                            $projectusers->project_id   = $project['project']['id'];
+                            $projectusers->user_id     = $user->user42_id;
+                        };
+
+                        if ($project['cursus_ids'])
+                            $projectusers->cursus_id        = $project['cursus_ids'][0];
+                        $projectusers->occurrence       = $project['occurrence'];
+                        $projectusers->final_mark       = $project['final_mark'];
+                        $projectusers->status           = $project['status'];
+                        $projectusers->validated        = $project['validated?'];
+                        $projectusers->current_team_id  = $project['current_team_id'];
+                        $projectusers->marked_at        = $project['marked_at'];
+                        $projectusers->marked           = $project['marked'];
+                        $projectusers->retriable_at     = $project['retriable_at'];
+                        $projectusers->save();
+                    
+                    }
+
+                    foreach($user42['cursus_users'] as $cursus)
+                    {
+                        $cursususer = CursusUser::where('user_id', $user->user42_id)
+                            ->where('cursus_id', $cursus['cursus']['id'])
+                            ->first();
+
                         if (!$cursususer)
                         {
                             $cursususer = new CursusUser();
-                            $cursususer->cursus_id   = $cursus['cursus_id'];
+                            $cursususer->cursus_id   = $cursus['cursus']['id'];
                             $cursususer->user_id     = $user->user42_id;
                         };
     
@@ -182,8 +223,8 @@ class Sync42 extends Command
     
                     }
 
-                    usleep(400000);
-
+                    usleep(300000);
+                
                 }
               
             }
@@ -270,5 +311,114 @@ class Sync42 extends Command
 
         }
 
+    }    
+    
+    public function sync_coalitions($coalitionsApi)
+    {
+        
+        $page = 1;
+
+        $coas = $coalitionsApi->all($page);
+
+        while ( $page <= $coas->lastPage() )
+        {
+            foreach($coas as $s)
+            {
+
+                $coalition = Coalition::where('coalition_id', $s['id'])->first();
+
+                if(!$coalition)
+                {
+                    $coalition = new Coalition();
+
+                    $coalition->coalition_id        = $s['id'];
+                    $coalition->name                = $s['name'];
+                    $coalition->slug                = $s['slug'];
+                    $coalition->image_url           = $s['image_url'];
+                    $coalition->color               = $s['color'];
+                    $coalition->score               = $s['score'];
+                    $coalition->coalition_user_id   = $s['user_id'];
+
+                    $coalition->save();
+                }
+            }
+
+            if ( $page < $coas->lastPage() )
+            {
+                $page++;
+                $coas = $coalitionsApi->all($page);
+            } 
+            else
+                break;
+
+        }
+
     }
+
+    public function sync_projects($projectsApi)
+    {
+        
+        $page = 1;
+
+        $prjs = $projectsApi->all($page);
+
+        while ( $page <= $prjs->lastPage() )
+        {
+            foreach($prjs as $prj)
+            {
+
+                $project = Project::where('project_id', $prj['id'])->first();
+
+                if(!$project)
+                {
+                    $project = new Project();
+                    
+
+                    $project->project_id         = $prj['id'];
+                    $project->name               = $prj['name'];
+                    $project->slug               = $prj['slug'];
+                    if( $prj['parent'] != null )
+                        $project->parent             = $prj['parent']['id'];
+                    $project->exam               = $prj['exam'];
+                    $project->repository         = $prj['repository'];
+
+                    $project->save();
+
+                }
+
+                foreach($prj['cursus'] as $cur)
+                {
+                    if (!CursusProject::where('cursus_id', $cur['id'])->where('project_id', $prj['id'])->first())
+                    {
+                        $cursus = new CursusProject();
+                        $cursus->cursus_id = $cur['id'];
+                        $cursus->project_id = $prj['id'];
+                        $cursus->save();
+                    }
+                }
+
+                foreach($prj['campus'] as $cur)
+                {
+                    if (!CampusProject::where('campus_id', $cur['id'])->where('project_id', $prj['id'])->first())
+                    {
+                        $campus = new CampusProject();
+                        $campus->campus_id = $cur['id'];
+                        $campus->project_id = $prj['id'];
+                        $campus->save();
+                    }
+                }      
+            }
+
+            if ( $page < $prjs->lastPage() )
+            {
+                $page++;
+                $prjs = $projectsApi->all($page);
+            } 
+            else
+                break;
+
+        }
+
+    }
+
 }
