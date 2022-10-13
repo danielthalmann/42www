@@ -35,6 +35,7 @@ class DashboardController extends Controller
         $blackholeds = User::join('cursus_users', 'user42_id', '=', 'user_id')
         ->where('cursus_id', $cursusId)
         ->where('grade', 'Learner')
+        ->where('blackholed_at', '>', \Carbon\Carbon::now())
         ->whereNull('end_at')
         ->whereNotNull('blackholed_at')
         ->orderBy('blackholed_at', 'asc')

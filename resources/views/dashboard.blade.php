@@ -93,7 +93,7 @@
                     <div class="pt-6 md:p-5 text-center md:text-left space-y-4">
                         <figcaption class="font-medium">
                             <div class="text-sky-500 dark:text-sky-400">
-                                {{ $user->name }}
+                                {{ $user->name }} (<small class="text-white">{{ $user->level }}</small>)
                             </div>
                             <div class="text-slate-500">
                             {{ $user->blackholed_at->format('d.m.Y') }}
