@@ -32,6 +32,7 @@ class UsersController extends Controller
         $users = CursusUser::where('cursus_id', $cursusId)
 			->join('users', 'users.user42_id', '=', 'cursus_users.user_id')
 			->where('grade', 'Learner')
+            ->whereNotNull('blackholed_at')
 			->orderBy('level', 'desc')
         	->get();
 

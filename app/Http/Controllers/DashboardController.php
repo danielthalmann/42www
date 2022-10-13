@@ -42,6 +42,24 @@ class DashboardController extends Controller
         ->limit(5)
         ->get();
 
+        $bestLevel = User::join('cursus_users', 'user42_id', '=', 'user_id')
+        ->where('cursus_id', $cursusId)
+        ->where('grade', 'Learner')
+        ->whereNotNull('blackholed_at')
+        ->whereNull('end_at')
+        ->whereNotNull('blackholed_at')
+        ->orderBy('level', 'desc')
+        ->first();
+
+        $bestPoint = User::join('cursus_users', 'user42_id', '=', 'user_id')
+        ->where('cursus_id', $cursusId)
+        ->where('grade', 'Learner')
+        ->whereNotNull('blackholed_at')
+        ->whereNull('end_at')
+        ->whereNotNull('blackholed_at')
+        ->orderBy('correction_point', 'desc')
+        ->first();
+
         $projectCount = ProjectUser::where('user_id', $cuser->user42_id)
         ->where('cursus_id', $cursusId)
         ->where('validated', true)
@@ -74,7 +92,17 @@ class DashboardController extends Controller
         ->orderBy('marked_at', 'desc')
         ->first();
 
-        return view('dashboard', compact(['blackholeds', 'cuser', 'cursus', 'projectCount', 'projectCursusCount', 'projectInprogressCount', 'projectAvg', 'projectAvgCursus', 'projectLast']));
+        return view('dashboard', compact(['blackholeds', 
+        'cuser', 
+        'cursus', 
+        'projectCount', 
+        'projectCursusCount', 
+        'projectInprogressCount', 
+        'projectAvg', 
+        'projectAvgCursus', 
+        'bestLevel', 
+        'bestPoint', 
+        'projectLast']));
     }
     
 }

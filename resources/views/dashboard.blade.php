@@ -5,10 +5,14 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 lg:flex">
-    
+    <div class="py-12 lg:flex  max-w-7xl mx-auto">
+
         <div class="lg:w-2/3 2xl:w-3/4">
 
+            <div class="sm:px-3">
+                <h2 class="font-semibold text-xl text-gray-100 leading-tight mb-2">Your score</h2>
+            </div>
+            
             <div class="grid sm:grid-cols-3 lg:grid-cols-4">
 
                 <div class="sm:px-3 mb-5">
@@ -79,7 +83,45 @@
                 </div>
 
             </div>
+           
+            <div class="flex">
 
+                <div class="sm:px-3 w-1/3">
+                    <h2 class="font-semibold text-xl text-gray-100 leading-tight mb-2">Best Level</h2>
+
+                    <figure class="overflow-hidden md:flex rounded-xl p-8 mb-2 md:p-0 bg-slate-800">
+                        <img class="max-h-24 md:h-auto mx-auto md:mx-0" src="{{ $bestLevel->image_url_small }}" alt="">
+                        <div class="pt-6 md:p-5 text-center md:text-left space-y-4">
+                            <figcaption class="font-medium">
+                                <div class="text-sky-500 dark:text-sky-400">
+                                    {{ $bestLevel->name }}
+                                </div>
+                                <div class="text-slate-500">
+                                {{ $bestLevel->level}} level
+                                </div>
+                            </figcaption>
+                        </div>
+                    </figure>
+                </div>
+
+                <div class="sm:px-3 w-1/3">
+                    <h2 class="font-semibold text-xl text-gray-100 leading-tight mb-2">Best point</h2>
+
+                    <figure class="overflow-hidden md:flex rounded-xl p-8 mb-2 md:p-0 bg-slate-800">
+                        <img class="max-h-24 md:h-auto mx-auto md:mx-0" src="{{ $bestPoint->image_url_small }}" alt="">
+                        <div class="pt-6 md:p-5 text-center md:text-left space-y-4">
+                            <figcaption class="font-medium">
+                                <div class="text-sky-500 dark:text-sky-400">
+                                    {{ $bestPoint->name }}
+                                </div>
+                                <div class="text-slate-500">
+                                {{ $bestPoint->correction_point }} points
+                                </div>
+                            </figcaption>
+                        </div>
+                    </figure>
+                </div>
+            </div>
         </div>
 
         <div class="lg:w-1/3  2xl:w-1/4">
@@ -88,8 +130,8 @@
                 <h2 class="font-semibold text-xl text-gray-100 leading-tight mb-2">Next Blackhole</h2>
            
                 @foreach($blackholeds as $user)
-                <figure class="md:flex rounded-xl p-8 mb-2 md:p-0 bg-slate-800">
-                    <img class="max-h-24 md:h-auto mx-auto md:mx-0" src="{{ $user->image_url }}" alt="">
+                <figure class="overflow-hidden md:flex rounded-xl p-8 mb-2 md:p-0 bg-slate-800">
+                    <img class="max-h-24 md:h-auto mx-auto md:mx-0" src="{{ $user->image_url_small }}" alt="">
                     <div class="pt-6 md:p-5 text-center md:text-left space-y-4">
                         <figcaption class="font-medium">
                             <div class="text-sky-500 dark:text-sky-400">
@@ -104,6 +146,7 @@
                 @endforeach
 
             </div>
+           
 
         </div>
 
