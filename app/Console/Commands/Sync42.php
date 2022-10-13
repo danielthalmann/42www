@@ -58,7 +58,7 @@ class Sync42 extends Command
         $this->sync_skills($clientApi->skills());
         $this->sync_coalitions($clientApi->coalitions());
         $this->sync_projects($clientApi->projects());
-    //    $this->sync_users($clientApi->users(), $clientApi->campus());
+        $this->sync_users($clientApi->users(), $clientApi->campus());
 
         return 0;
     }
@@ -163,6 +163,11 @@ class Sync42 extends Command
                         $user->wallet             = $user42['wallet'];
                         $user->alumni             = $user42['alumni?'];
                         $user->alumnized_at       = $user42['alumnized_at'];
+
+                        $user->created_at       = $user42['created_at'];
+                        $user->updated_at       = $user42['updated_at'];
+
+                        
 
                         $user->password    = ''; // Hash::make();
 
