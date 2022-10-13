@@ -139,7 +139,7 @@ class Sync42 extends Command
                 
                 $user = User::where('user42_id', $user42['id'])->first();
 
-                if (!$user)
+                if (true)
                 {
                     $user42 = $userApi->get($user42['id']);
 
@@ -149,30 +149,34 @@ class Sync42 extends Command
 
                         $user->user42_id   = $user42['id'];
                         $user->name        = $user42['displayname'];
-                        $user->login       = $user42['login'];
-                        $user->email       = $user42['email'];
-                        $user->first_name  = $user42['first_name'];
-                        $user->last_name   = $user42['last_name'];
-                        $user->url         = $user42['url'];
-                        $user->phone       = $user42['phone'];
-                        $user->image_url   = $user42['image_url'];
-                        $user->correction_point = $user42['correction_point'];
-                        $user->pool_month  = $user42['pool_month'];
-                        $user->pool_year   = $user42['pool_year'];
-                        $user->correction_point   = $user42['correction_point'];
-                        $user->wallet             = $user42['wallet'];
-                        $user->alumni             = $user42['alumni?'];
-                        $user->alumnized_at       = $user42['alumnized_at'];
-
-                        $user->created_at       = $user42['created_at'];
-                        $user->updated_at       = $user42['updated_at'];
-
-                        
-
                         $user->password    = ''; // Hash::make();
-
-                        $user->save();
+                        $user->email       = $user42['email'];
                     }
+
+                    $user->login       = $user42['login'];
+                    $user->first_name  = $user42['first_name'];
+                    $user->last_name   = $user42['last_name'];
+                    $user->url         = $user42['url'];
+                    $user->phone       = $user42['phone'];
+                    $user->image_url   = $user42['image_url'];
+
+                    $user->image_url_large  = $user42['image']['versions']['large'];
+                    $user->image_url_medium = $user42['image']['versions']['medium'];
+                    $user->image_url_small  = $user42['image']['versions']['small'];
+                    $user->image_url_micro  = $user42['image']['versions']['micro'];
+
+                    $user->correction_point = $user42['correction_point'];
+                    $user->pool_month  = $user42['pool_month'];
+                    $user->pool_year   = $user42['pool_year'];
+                    $user->correction_point = $user42['correction_point'];
+                    $user->wallet           = $user42['wallet'];
+                    $user->alumni           = $user42['alumni?'];
+                    $user->alumnized_at     = $user42['alumnized_at'];
+
+                    $user->created_at       = $user42['created_at'];
+                    $user->updated_at       = $user42['updated_at'];
+
+                    $user->save();
 
                     foreach($user42['projects_users'] as $project)
                     {
@@ -228,7 +232,7 @@ class Sync42 extends Command
     
                     }
 
-                    usleep(300000);
+                    usleep(100000);
                 
                 }
               
