@@ -14,6 +14,7 @@ use App\Models\ProjectUser;
 use App\Models\CampusProject;
 use App\Models\CursusProject;
 use App\Services\ClientOAuth;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 
@@ -53,6 +54,7 @@ class Sync42 extends Command
         
 
         $clientApi = new Api42(ClientOAuth::make());
+
         $this->sync_campus($clientApi->campus());
         $this->sync_cursus($clientApi->cursus());
         $this->sync_skills($clientApi->skills());
@@ -136,11 +138,23 @@ class Sync42 extends Command
 
             foreach($us as $user42)
             {
+                $update_user = false;
                 
                 $user = User::where('user42_id', $user42['id'])->first();
 
-                if (true)
+                if (!$user) {
+                    $update_user = true;
+                }
+                else {
+                    if (Carbon::parse($user->updated_at)->startOfDay()->lt(Carbon::parse($user42['updated_at'])->startOfDay())) {
+                        $update_user = true; 
+                    }
+                }
+
+                if ($update_user)
                 {
+                    $this->line($user42['login'] . ' update' . Carbon::parse($user->updated_at) . ' ' . Carbon::parse($user42['updated_at']));
+
                     $user42 = $userApi->get($user42['id']);
 
                     if(!$user)
@@ -233,7 +247,9 @@ class Sync42 extends Command
                     }
 
                     usleep(100000);
-                
+                } else{
+                    $this->line($user42['login'] . ' no need update');
+
                 }
               
             }
