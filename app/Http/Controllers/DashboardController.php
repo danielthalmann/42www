@@ -110,7 +110,8 @@ class DashboardController extends Controller
         'projectAvg', 
         'projectAvgCursus', 
         'bestLevel', 
-        'bestPoint', 
+        'bestPoint',
+        'richMen',
         'projectLast']));
     }
     
