@@ -60,6 +60,15 @@ class DashboardController extends Controller
         ->orderBy('correction_point', 'desc')
         ->first();
 
+        $richMen = User::join('cursus_users', 'user42_id', '=', 'user_id')
+        ->where('cursus_id', $cursusId)
+        ->where('grade', 'Learner')
+        ->whereNotNull('blackholed_at')
+        ->whereNull('end_at')
+        ->whereNotNull('blackholed_at')
+        ->orderBy('wallet', 'desc')
+        ->first();
+
         $projectCount = ProjectUser::where('user_id', $cuser->user42_id)
         ->where('cursus_id', $cursusId)
         ->where('validated', true)

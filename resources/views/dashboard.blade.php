@@ -121,6 +121,25 @@
                         </div>
                     </figure>
                 </div>
+
+                <div class="sm:px-3 w-1/3">
+                    <h2 class="font-semibold text-xl text-gray-100 leading-tight mb-2">Rich</h2>
+
+                    <figure class="overflow-hidden md:flex rounded-xl p-8 mb-2 md:p-0 bg-slate-800">
+                        <img class="max-h-24 md:h-auto mx-auto md:mx-0" src="{{ $richMen->image_url_small }}" alt="">
+                        <div class="pt-6 md:p-5 text-center md:text-left space-y-4">
+                            <figcaption class="font-medium">
+                                <div class="text-sky-500 dark:text-sky-400">
+                                    {{ $richMen->name }}
+                                </div>
+                                <div class="text-slate-500">
+                                {{ $richMen->wallet }} wallet
+                                </div>
+                            </figcaption>
+                        </div>
+                    </figure>
+                </div>
+
             </div>
         </div>
 
