@@ -30,11 +30,12 @@
                 </tr>
                 </thead>
                 <tbody>
+                @php $counter = 0; @endphp
                 @foreach($users as $user)
                 <tr class="@if(\Carbon\Carbon::parse($user->blackholed_at)->lt(\Carbon\Carbon::now())) text-red-500 @endif">
                     <td class="    border border-slate-600 w-12" dtat-id="{{$user->user_id}}"><img src="{{ $user->image_url_small }}" alt=""></td>
         {{--        <td class="p-4 border border-slate-600">{{ $user->user_id           }}</td> --}}
-                    <td class="p-4 border border-slate-600">{{ $user->name              }}</td>
+                    <td class="p-4 border border-slate-600">#{{ ++$counter }} {{ $user->name              }}</td>
                     <td class="p-4 border border-slate-600"><a target="_blank" href="https://profile.intra.42.fr/users/{{ $user->login }}">{{ $user->login }}</a></td>
                     <td class="p-4 border border-slate-600">{{ $user->level             }}</td>
                     <td class="p-4 border border-slate-600">{{ $user->begin_at ? \Carbon\Carbon::parse($user->begin_at)->format('d.m.Y') : null         }}</td>
