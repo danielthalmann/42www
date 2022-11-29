@@ -172,12 +172,18 @@ class Sync42 extends Command
                     $user->last_name   = $user42['last_name'];
                     $user->url         = $user42['url'];
                     $user->phone       = $user42['phone'];
-                    $user->image_url   = $user42['image_url'];
-
-                    $user->image_url_large  = $user42['image']['versions']['large'];
-                    $user->image_url_medium = $user42['image']['versions']['medium'];
-                    $user->image_url_small  = $user42['image']['versions']['small'];
-                    $user->image_url_micro  = $user42['image']['versions']['micro'];
+                    if (key_exists('image_url', $user42)) {
+                        $user->image_url   = $user42['image_url'];
+                    }
+                    if (key_exists('image', $user42)) {
+                        if (key_exists('link', $user42['image'])) {
+                            $user->image_url   = $user42['image']['link'];
+                        }
+                        $user->image_url_large  = $user42['image']['versions']['large'];
+                        $user->image_url_medium = $user42['image']['versions']['medium'];
+                        $user->image_url_small  = $user42['image']['versions']['small'];
+                        $user->image_url_micro  = $user42['image']['versions']['micro'];
+                    }
 
                     $user->correction_point = $user42['correction_point'];
                     $user->pool_month  = $user42['pool_month'];
