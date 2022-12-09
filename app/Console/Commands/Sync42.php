@@ -160,52 +160,59 @@ class Sync42 extends Command
 
                 if ($update_user)
                 {
-                    $user42 = $userApi->get($user42['id']);
+                    $user_detail_42 = $userApi->get($user42['_detail_id']);
+
+                    if (!$user_detail_42)
+                    {
+                        $this->line('detail of user ' . $user42['_detail_id'] . ' not found');
+                        break;
+                    }
+                    
 
                     if(!$user)
                     {
                         $user = new User();
 
-                        $user->user42_id   = $user42['id'];
-                        $user->name        = $user42['displayname'];
+                        $user->user42_id   = $user_detail_42['id'];
+                        $user->name        = $user_detail_42['displayname'];
                         $user->password    = ''; // Hash::make();
-                        $user->email       = $user42['email'];
+                        $user->email       = $user_detail_42['email'];
                     }
 
-                    $this->line($user42['login'] . ' update' . Carbon::parse($user->updated_at) . ' ' . Carbon::parse($user42['updated_at']));
+                    $this->line($user_detail_42['login'] . ' update' . Carbon::parse($user->updated_at) . ' ' . Carbon::parse($user_detail_42['updated_at']));
 
-                    $user->login       = $user42['login'];
-                    $user->first_name  = $user42['first_name'];
-                    $user->last_name   = $user42['last_name'];
-                    $user->url         = $user42['url'];
-                    $user->phone       = $user42['phone'];
-                    if (key_exists('image_url', $user42)) {
-                        $user->image_url   = $user42['image_url'];
+                    $user->login       = $user_detail_42['login'];
+                    $user->first_name  = $user_detail_42['first_name'];
+                    $user->last_name   = $user_detail_42['last_name'];
+                    $user->url         = $user_detail_42['url'];
+                    $user->phone       = $user_detail_42['phone'];
+                    if (key_exists('image_url', $user_detail_42)) {
+                        $user->image_url   = $user_detail_42['image_url'];
                     }
-                    if (key_exists('image', $user42)) {
-                        if (key_exists('link', $user42['image'])) {
-                            $user->image_url   = $user42['image']['link'];
+                    if (key_exists('image', $user_detail_42)) {
+                        if (key_exists('link', $user_detail_42['image'])) {
+                            $user->image_url   = $user_detail_42['image']['link'];
                         }
-                        $user->image_url_large  = $user42['image']['versions']['large'];
-                        $user->image_url_medium = $user42['image']['versions']['medium'];
-                        $user->image_url_small  = $user42['image']['versions']['small'];
-                        $user->image_url_micro  = $user42['image']['versions']['micro'];
+                        $user->image_url_large  = $user_detail_42['image']['versions']['large'];
+                        $user->image_url_medium = $user_detail_42['image']['versions']['medium'];
+                        $user->image_url_small  = $user_detail_42['image']['versions']['small'];
+                        $user->image_url_micro  = $user_detail_42['image']['versions']['micro'];
                     }
 
-                    $user->correction_point = $user42['correction_point'];
-                    $user->pool_month  = $user42['pool_month'];
-                    $user->pool_year   = $user42['pool_year'];
-                    $user->correction_point = $user42['correction_point'];
-                    $user->wallet           = $user42['wallet'];
-                    $user->alumni           = $user42['alumni?'];
-                    $user->alumnized_at     = $user42['alumnized_at'];
+                    $user->correction_point = $user_detail_42['correction_point'];
+                    $user->pool_month  = $user_detail_42['pool_month'];
+                    $user->pool_year   = $user_detail_42['pool_year'];
+                    $user->correction_point = $user_detail_42['correction_point'];
+                    $user->wallet           = $user_detail_42['wallet'];
+                    $user->alumni           = $user_detail_42['alumni?'];
+                    $user->alumnized_at     = $user_detail_42['alumnized_at'];
 
-                    $user->created_at       = $user42['created_at'];
-                    $user->updated_at       = $user42['updated_at'];
+                    $user->created_at       = $user_detail_42['created_at'];
+                    $user->updated_at       = $user_detail_42['updated_at'];
 
                     $user->save();
 
-                    foreach($user42['projects_users'] as $project)
+                    foreach($user_detail_42['projects_users'] as $project)
                     {
 
                         $projectusers = ProjectUser::where('user_id', $user->user42_id)
@@ -233,7 +240,7 @@ class Sync42 extends Command
                     
                     }
 
-                    foreach($user42['cursus_users'] as $cursus)
+                    foreach($user_detail_42['cursus_users'] as $cursus)
                     {
                         $cursususer = CursusUser::where('user_id', $user->user42_id)
                             ->where('cursus_id', $cursus['cursus']['id'])
@@ -261,7 +268,7 @@ class Sync42 extends Command
 
                     usleep(100000);
                 } else{
-                    $this->line($user42['login'] . ' no need update');
+                    $this->line($user_detail_42['login'] . ' no need update');
 
                 }
               
