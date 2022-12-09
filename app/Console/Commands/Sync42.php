@@ -243,6 +243,10 @@ class Sync42 extends Command
                         {
                             $cursususer = CursusUser::where('user_id', $user->user42_id)
                                 ->where('cursus_id', $cursus['cursus']['id'])
+                                ->delete();
+
+                                $cursususer = CursusUser::where('user_id', $user->user42_id)
+                                ->where('cursus_id', $cursus['cursus']['id'])
                                 ->first();
     
                             if (!$cursususer)
@@ -266,8 +270,8 @@ class Sync42 extends Command
                         }
                     }                    
 
-                    usleep(100000);
-                    
+                    usleep(120000);
+
                 } else{
                     $this->line($user_detail_42['login'] . ' no need update');
 
