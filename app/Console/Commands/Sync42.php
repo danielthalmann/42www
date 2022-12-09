@@ -160,11 +160,11 @@ class Sync42 extends Command
 
                 if ($update_user)
                 {
-                    $user_detail_42 = $userApi->get($user42['_detail_id']);
+                    $user_detail_42 = $userApi->get($user42['id']);
 
                     if (!$user_detail_42)
                     {
-                        $this->line('detail of user ' . $user42['_detail_id'] . ' not found');
+                        $this->line('detail of user ' . $user42['id'] . ' not found');
                         break;
                     }
                     
