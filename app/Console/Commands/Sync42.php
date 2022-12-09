@@ -165,108 +165,109 @@ class Sync42 extends Command
                     if (!$user_detail_42)
                     {
                         $this->line('detail of user ' . $user42['id'] . ' not found');
-                        break;
                     }
-                    
-
-                    if(!$user)
+                    else
                     {
-                        $user = new User();
-
-                        $user->user42_id   = $user_detail_42['id'];
-                        $user->name        = $user_detail_42['displayname'];
-                        $user->password    = ''; // Hash::make();
-                        $user->email       = $user_detail_42['email'];
-                    }
-
-                    $this->line($user_detail_42['login'] . ' update' . Carbon::parse($user->updated_at) . ' ' . Carbon::parse($user_detail_42['updated_at']));
-
-                    $user->login       = $user_detail_42['login'];
-                    $user->first_name  = $user_detail_42['first_name'];
-                    $user->last_name   = $user_detail_42['last_name'];
-                    $user->url         = $user_detail_42['url'];
-                    $user->phone       = $user_detail_42['phone'];
-                    if (key_exists('image_url', $user_detail_42)) {
-                        $user->image_url   = $user_detail_42['image_url'];
-                    }
-                    if (key_exists('image', $user_detail_42)) {
-                        if (key_exists('link', $user_detail_42['image'])) {
-                            $user->image_url   = $user_detail_42['image']['link'];
+                        if(!$user)
+                        {
+                            $user = new User();
+    
+                            $user->user42_id   = $user_detail_42['id'];
+                            $user->name        = $user_detail_42['displayname'];
+                            $user->password    = ''; // Hash::make();
+                            $user->email       = $user_detail_42['email'];
                         }
-                        $user->image_url_large  = $user_detail_42['image']['versions']['large'];
-                        $user->image_url_medium = $user_detail_42['image']['versions']['medium'];
-                        $user->image_url_small  = $user_detail_42['image']['versions']['small'];
-                        $user->image_url_micro  = $user_detail_42['image']['versions']['micro'];
-                    }
-
-                    $user->correction_point = $user_detail_42['correction_point'];
-                    $user->pool_month  = $user_detail_42['pool_month'];
-                    $user->pool_year   = $user_detail_42['pool_year'];
-                    $user->correction_point = $user_detail_42['correction_point'];
-                    $user->wallet           = $user_detail_42['wallet'];
-                    $user->alumni           = $user_detail_42['alumni?'];
-                    $user->alumnized_at     = $user_detail_42['alumnized_at'];
-
-                    $user->created_at       = $user_detail_42['created_at'];
-                    $user->updated_at       = $user_detail_42['updated_at'];
-
-                    $user->save();
-
-                    foreach($user_detail_42['projects_users'] as $project)
-                    {
-
-                        $projectusers = ProjectUser::where('user_id', $user->user42_id)
-                            ->where('project_id', $project['project']['id'])
-                            ->first();
-
-                        if (!$projectusers)
-                        {
-                            $projectusers = new ProjectUser();
-                            $projectusers->project_id   = $project['project']['id'];
-                            $projectusers->user_id     = $user->user42_id;
-                        };
-
-                        if ($project['cursus_ids'])
-                            $projectusers->cursus_id        = $project['cursus_ids'][0];
-                        $projectusers->occurrence       = $project['occurrence'];
-                        $projectusers->final_mark       = $project['final_mark'];
-                        $projectusers->status           = $project['status'];
-                        $projectusers->validated        = $project['validated?'];
-                        $projectusers->current_team_id  = $project['current_team_id'];
-                        $projectusers->marked_at        = $project['marked_at'];
-                        $projectusers->marked           = $project['marked'];
-                        $projectusers->retriable_at     = $project['retriable_at'];
-                        $projectusers->save();
-                    
-                    }
-
-                    foreach($user_detail_42['cursus_users'] as $cursus)
-                    {
-                        $cursususer = CursusUser::where('user_id', $user->user42_id)
-                            ->where('cursus_id', $cursus['cursus']['id'])
-                            ->first();
-
-                        if (!$cursususer)
-                        {
-                            $cursususer = new CursusUser();
-                            $cursususer->cursus_id   = $cursus['cursus']['id'];
-                            $cursususer->user_id     = $user->user42_id;
-                        };
     
-                        $cursususer->cursus_name = $cursus['cursus']['name'];
-                        $cursususer->user_name   = $user->name;
-                    
-                        $cursususer->grade         = $cursus['grade'];
-                        $cursususer->level         = $cursus['level'];
-                        $cursususer->begin_at      = $cursus['begin_at'];
-                        $cursususer->end_at        = $cursus['end_at'];
-                        $cursususer->blackholed_at = $cursus['blackholed_at'];
-                        $cursususer->has_coalition = $cursus['has_coalition'];
-                        $cursususer->save();
+                        $this->line($user_detail_42['login'] . ' update' . Carbon::parse($user->updated_at) . ' ' . Carbon::parse($user_detail_42['updated_at']));
     
-                    }
+                        $user->login       = $user_detail_42['login'];
+                        $user->first_name  = $user_detail_42['first_name'];
+                        $user->last_name   = $user_detail_42['last_name'];
+                        $user->url         = $user_detail_42['url'];
+                        $user->phone       = $user_detail_42['phone'];
+                        if (key_exists('image_url', $user_detail_42)) {
+                            $user->image_url   = $user_detail_42['image_url'];
+                        }
+                        if (key_exists('image', $user_detail_42)) {
+                            if (key_exists('link', $user_detail_42['image'])) {
+                                $user->image_url   = $user_detail_42['image']['link'];
+                            }
+                            $user->image_url_large  = $user_detail_42['image']['versions']['large'];
+                            $user->image_url_medium = $user_detail_42['image']['versions']['medium'];
+                            $user->image_url_small  = $user_detail_42['image']['versions']['small'];
+                            $user->image_url_micro  = $user_detail_42['image']['versions']['micro'];
+                        }
+    
+                        $user->correction_point = $user_detail_42['correction_point'];
+                        $user->pool_month  = $user_detail_42['pool_month'];
+                        $user->pool_year   = $user_detail_42['pool_year'];
+                        $user->correction_point = $user_detail_42['correction_point'];
+                        $user->wallet           = $user_detail_42['wallet'];
+                        $user->alumni           = $user_detail_42['alumni?'];
+                        $user->alumnized_at     = $user_detail_42['alumnized_at'];
+    
+                        $user->created_at       = $user_detail_42['created_at'];
+                        $user->updated_at       = $user_detail_42['updated_at'];
+    
+                        $user->save();
+    
+                        foreach($user_detail_42['projects_users'] as $project)
+                        {
+    
+                            $projectusers = ProjectUser::where('user_id', $user->user42_id)
+                                ->where('project_id', $project['project']['id'])
+                                ->first();
+    
+                            if (!$projectusers)
+                            {
+                                $projectusers = new ProjectUser();
+                                $projectusers->project_id   = $project['project']['id'];
+                                $projectusers->user_id     = $user->user42_id;
+                            };
+    
+                            if ($project['cursus_ids'])
+                                $projectusers->cursus_id        = $project['cursus_ids'][0];
+                            $projectusers->occurrence       = $project['occurrence'];
+                            $projectusers->final_mark       = $project['final_mark'];
+                            $projectusers->status           = $project['status'];
+                            $projectusers->validated        = $project['validated?'];
+                            $projectusers->current_team_id  = $project['current_team_id'];
+                            $projectusers->marked_at        = $project['marked_at'];
+                            $projectusers->marked           = $project['marked'];
+                            $projectusers->retriable_at     = $project['retriable_at'];
+                            $projectusers->save();
+                        
+                        }
+    
+                        foreach($user_detail_42['cursus_users'] as $cursus)
+                        {
+                            $cursususer = CursusUser::where('user_id', $user->user42_id)
+                                ->where('cursus_id', $cursus['cursus']['id'])
+                                ->first();
+    
+                            if (!$cursususer)
+                            {
+                                $cursususer = new CursusUser();
+                                $cursususer->cursus_id   = $cursus['cursus']['id'];
+                                $cursususer->user_id     = $user->user42_id;
+                            };
+        
+                            $cursususer->cursus_name = $cursus['cursus']['name'];
+                            $cursususer->user_name   = $user->name;
+                        
+                            $cursususer->grade         = $cursus['grade'];
+                            $cursususer->level         = $cursus['level'];
+                            $cursususer->begin_at      = $cursus['begin_at'];
+                            $cursususer->end_at        = $cursus['end_at'];
+                            $cursususer->blackholed_at = $cursus['blackholed_at'];
+                            $cursususer->has_coalition = $cursus['has_coalition'];
+                            $cursususer->save();
+        
+                        }
+                    }                    
 
                     usleep(100000);
+                    
                 } else{
                     $this->line($user_detail_42['login'] . ' no need update');
 
