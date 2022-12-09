@@ -25,7 +25,7 @@ class Sync42 extends Command
      *
      * @var string
      */
-    protected $signature = 'sync42:all';
+    protected $signature = 'sync42:all {--users}';
 
     /**
      * The console command description.
@@ -55,12 +55,19 @@ class Sync42 extends Command
 
         $clientApi = new Api42(ClientOAuth::make());
 
-        $this->sync_campus($clientApi->campus());
-        $this->sync_cursus($clientApi->cursus());
-        $this->sync_skills($clientApi->skills());
-        $this->sync_coalitions($clientApi->coalitions());
-        $this->sync_projects($clientApi->projects());
-        $this->sync_users($clientApi->users(), $clientApi->campus());
+        if ($this->option('users'))
+        {
+            $this->sync_users($clientApi->users(), $clientApi->campus());
+        }
+        else 
+        {
+            $this->sync_campus($clientApi->campus());
+            $this->sync_cursus($clientApi->cursus());
+            $this->sync_skills($clientApi->skills());
+            $this->sync_coalitions($clientApi->coalitions());
+            $this->sync_projects($clientApi->projects());
+            $this->sync_users($clientApi->users(), $clientApi->campus());
+        }
 
         return 0;
     }
@@ -142,7 +149,7 @@ class Sync42 extends Command
                 
                 $user = User::where('user42_id', $user42['id'])->first();
 
-                if (!$user) {
+                if (!$user || $this->option('users')) {
                     $update_user = true;
                 }
                 else {
@@ -153,8 +160,6 @@ class Sync42 extends Command
 
                 if ($update_user)
                 {
-                    $this->line($user42['login'] . ' update' . Carbon::parse($user->updated_at) . ' ' . Carbon::parse($user42['updated_at']));
-
                     $user42 = $userApi->get($user42['id']);
 
                     if(!$user)
@@ -166,6 +171,8 @@ class Sync42 extends Command
                         $user->password    = ''; // Hash::make();
                         $user->email       = $user42['email'];
                     }
+
+                    $this->line($user42['login'] . ' update' . Carbon::parse($user->updated_at) . ' ' . Carbon::parse($user42['updated_at']));
 
                     $user->login       = $user42['login'];
                     $user->first_name  = $user42['first_name'];
@@ -455,5 +462,20 @@ class Sync42 extends Command
         }
 
     }
+
+    /**
+     * Write a string as standard output.
+     *
+     * @param  string  $string
+     * @param  string|null  $style
+     * @param  int|string|null  $verbosity
+     * @return void
+     */
+    public function line($string, $style = null, $verbosity = null)
+    {
+        \Log::info($string);
+        Parent::line($string, $style, $verbosity);
+    }
+
 
 }

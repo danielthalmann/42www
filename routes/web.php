@@ -37,9 +37,10 @@ Route::get('/users', [UsersController::class, 'index'])
     ->middleware(['auth'])
     ->name('users');
 
-// Route::get('/login', function(){
-//     $user = App\Models\User::where('login', 'dthalman')->first();
-//     Illuminate\Support\Facades\Auth::login($user);
-// });
+ Route::get('/login', function(){
+     $user = App\Models\User::where('login', 'dthalman')->first();
+     Illuminate\Support\Facades\Auth::login($user);
+     return redirect()->route('dashboard');
+ });
 
 require __DIR__.'/auth.php';
